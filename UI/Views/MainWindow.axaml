@@ -1,0 +1,134 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:dsa_battle_tracker.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="600"
+        x:Class="dsa_battle_tracker.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="DSA Stattracker"
+        Name="Main"
+        >
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <!--
+                        <Expander Header="{Binding LoadText}">
+                            <Expander.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Speichern..."/>
+                                    <MenuItem Header="Entfernen"/>
+                                </ContextMenu>
+                            </Expander.ContextMenu>
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Content="{Binding LoadText}"></Button>
+                                    <Button>{Binding LoadText}</Button>
+                                </StackPanel>
+                            </StackPanel>
+                        </Expander>
+    -->
+
+    <!--CONTENT-->
+    <Grid RowDefinitions="0.1*,*,0.1*" HorizontalAlignment="Stretch">
+        <Grid.Styles>
+            <Style Selector=":is(ContentControl)">
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+            </Style>
+        </Grid.Styles>
+    
+        <!--Menüband-->
+        <Border Background="LightGray">
+            <DockPanel>
+                <Menu DockPanel.Dock="Left">
+                    <MenuItem Header="☰">
+                        <MenuItem Header="Sortieren (INI)" Command="{Binding INISort}" />
+                        <MenuItem Header="Sortieren (Alphabetisch)" />
+                        <Separator />
+                        <MenuItem Header="Liste speichern..." />
+                        <MenuItem Header="Liste laden..." />
+                    </MenuItem>
+                </Menu>
+            </DockPanel>
+        </Border>
+        
+        <!--Charaktere-->
+        <ListBox Grid.Row="1" ItemsSource="{Binding Chars}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <!--TODO: Expander flashen, wenn man die Tasten an den Zahlen drückt-->
+                    <Expander Header="{Binding Name}">
+                        <Expander.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Speichern"
+                                    Command="{Binding #Main.DataContext.QuickSaveChar}"
+                                    CommandParameter="{Binding}"
+                                    />
+                                <MenuItem Header="Speichern unter..."
+                                    Command="{Binding #Main.DataContext.SaveChar}"
+                                    CommandParameter="{Binding}"
+                                    />
+                                <MenuItem Header="Entfernen"
+                                    Command="{Binding #Main.DataContext.RemoveChar}"
+                                    CommandParameter="{Binding}"
+                                    />
+                            </ContextMenu>
+                        </Expander.ContextMenu>
+                        <StackPanel>
+                            <TextBox Text="{Binding Name, Mode=TwoWay}" />
+                            <UniformGrid Name="Stats" Columns="3">
+                                <UniformGrid.Styles>
+                                    <Style Selector="NumericUpDown">
+                                        <!--TODO-->
+                                        <Setter Property="ParsingNumberStyle" Value="Integer" />
+                                        <Setter Property="FormatString" Value="0" />
+                                        <Setter Property="Minimum" Value="0" />
+                                    </Style>
+                                    <!--
+                                    <Style Selector="Label">
+                                        <Setter Property="HorizontalContentAlignment" Value="Right" />
+                                    </Style>
+                                    -->
+                                </UniformGrid.Styles>
+
+                                <Label Content="LE:" />
+                                    <NumericUpDown Value="{Binding LE, Mode=TwoWay}" Minimum="{Binding MinLE, Mode=OneWay}" />
+                                    <NumericUpDown Value="{Binding MaxLE, Mode=TwoWay}" />
+                                <Label Content="AU:" />
+                                    <NumericUpDown Value="{Binding AU, Mode=TwoWay}" />
+                                    <NumericUpDown Value="{Binding MaxAU, Mode=TwoWay}" />
+                                <Label Content="AE:" />
+                                    <NumericUpDown Value="{Binding AE, Mode=TwoWay}" />
+                                    <NumericUpDown Value="{Binding MaxAE, Mode=TwoWay}" />
+                                <Label Content="KE:" />
+                                    <NumericUpDown Value="{Binding KE, Mode=TwoWay}" />
+                                    <NumericUpDown Value="{Binding MaxKE, Mode=TwoWay}" />
+                            </UniformGrid>
+                        </StackPanel>
+                    </Expander>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <!--Buttons Laden/Neu eingeben-->
+        <UniformGrid Grid.Row="2" Columns="2">
+            <UniformGrid.Styles>
+                <Style Selector="Button">
+                    <Setter Property="HorizontalAlignment" Value="Stretch" />
+                    <Setter Property="VerticalAlignment" Value="Stretch" />
+                    <Setter Property="HorizontalContentAlignment" Value="Center" />
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                </Style>
+            </UniformGrid.Styles>
+
+            <Button Content="{Binding LoadButtonContent}" />
+            <Button Content="{Binding NewButtonContent}" Command="{Binding NewCharacter}" />
+        </UniformGrid>
+    </Grid>
+
+</Window>
