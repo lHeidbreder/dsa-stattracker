@@ -16,19 +16,34 @@ using ReactiveUI;
 public partial class MainWindowViewModel : ViewModelBase
 {
     Lazy<Window?> window = new( () => App.MainWindow );
-    public MainWindowViewModel()
-    {
-        RemoveChar = ReactiveCommand.Create<DSACharacter>(P_RemoveChar);
-    }
-
+    
     public string LoadButtonContent { get; } = "Charakter laden...";
     public string NewButtonContent { get; } = "Neuen Charakter eingeben";
+
+    public async Task LoadCharacter()
+    {
+        if (window.Value is null)
+            throw new Exception("Kein Fenster gefunden");
+        var path = await window.Value.StorageProvider.OpenFilePickerAsync(
+            new Avalonia.Platform.Storage.FilePickerOpenOptions
+            {
+                FileTypeFilter = [new FilePickerFileType("JSON")],
+                AllowMultiple = false,
+            }
+        );
+
+        if (path.Count <= 0)
+            return;
+
+        var c = DSACharacter.Load(path[0].Path.AbsolutePath);
+        if (c is not null)
+            Chars.Add(c);
+    }
     public void NewCharacter()
     {
         Chars.Add(new());
     }
-    public ReactiveCommand<DSACharacter, Unit> RemoveChar { get; }
-    private void P_RemoveChar(DSACharacter c)
+    private void RemoveChar(DSACharacter c)
     {
         Chars.Remove(c);
     }
@@ -40,27 +55,27 @@ public partial class MainWindowViewModel : ViewModelBase
         }
         else
         {
-            SaveChar(c);
+            _ = SaveChar(c);
         }
     }
-    public void SaveChar(DSACharacter c)
+    public async Task SaveChar(DSACharacter c)
     {
         if (window.Value is null)
             throw new Exception("Kein Fenster gefunden");
-        var path = window.Value.StorageProvider.SaveFilePickerAsync(
+        var path = await window.Value.StorageProvider.SaveFilePickerAsync(
             new Avalonia.Platform.Storage.FilePickerSaveOptions
             {
                 SuggestedFileName = c.Name + ".json",
                 DefaultExtension = "json",
             }
-        ).Result;
+        );
 
         if (path is null)
             return;
 
-        if (File.Exists(path.Path.AbsolutePath)) //FIXME
+        if (File.Exists(path.Path.AbsolutePath)
+            && !await Msg.OverwriteWarning(window.Value, path.Path.AbsolutePath))
             return;
-            //Msg.OverwriteWarning(window.Value, path.Path.AbsolutePath);
 
         c.Save(path.Path.AbsolutePath);
     }
@@ -80,5 +95,11 @@ public partial class MainWindowViewModel : ViewModelBase
             .OrderBy(c => c.Ini)
         );
     }
-
+    public void AlphaSort()
+    {
+        Chars = new ObservableCollection<DSACharacter>(
+            Chars
+            .OrderBy(c => c.Name)
+        );
+    }
 }

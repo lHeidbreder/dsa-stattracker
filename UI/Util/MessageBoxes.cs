@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Dto;
@@ -5,8 +6,7 @@ using MsBox.Avalonia.Enums;
 
 public class Msg {
 
-    //FIXME: broken somehow?
-    public static bool OverwriteWarning(Window source, string path)
+    public static async Task<bool> OverwriteWarning(Window source, string path)
     {
         var box = MessageBoxManager.GetMessageBoxStandard(
             new MessageBoxStandardParams
@@ -18,9 +18,9 @@ public class Msg {
                 WindowStartupLocation = WindowStartupLocation.CenterOwner
             });
 
-        var result = box.ShowAsPopupAsync(source);
+        var result = await box.ShowAsPopupAsync(source);
 
-        return result.Result == ButtonResult.Yes;
+        return result == ButtonResult.Yes;
     }
 
 }

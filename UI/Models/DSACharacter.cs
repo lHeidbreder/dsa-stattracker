@@ -8,8 +8,8 @@ namespace dsa_battle_tracker.Models;
 public class DSACharacter : ObservableObject
 {
     [JsonIgnore]
-    public string? LoadPath { get; private set; } //TODO: set on load
-    private string _name;
+    public string? LoadPath { get; private set; }
+    private string _name = "";
     public string Name
     {
         get { return _name; }
@@ -27,11 +27,7 @@ public class DSACharacter : ObservableObject
         get => _maxstats[StatIndices.LE];
         set { SetProperty(ref _maxstats[0], value); }
     }
-    public int MinLE
-    {
-        get => -MaxLE;
-    }
-
+    
     public int AE
     {
         get => _stats[StatIndices.AE];
@@ -87,9 +83,25 @@ public class DSACharacter : ObservableObject
         this.KE = MaxKE;
     }
 
-    public static System.Collections.Generic.IEnumerable<DSACharacter> LoadList(string Path) => LoadList(new FileInfo(Path));
-    public static System.Collections.Generic.IEnumerable<DSACharacter> LoadList(System.IO.FileInfo Path) => throw new NotImplementedException(); //TODO
-    public static DSACharacter Load(string Path) => throw new NotImplementedException(); //TODO
+    public static System.Collections.Generic.IEnumerable<DSACharacter>? LoadList(string Path)
+    {
+        if (!File.Exists(Path))
+            return null;
+        
+        var s = File.ReadAllText(Path);
+        return System.Text.Json.JsonSerializer.Deserialize<System.Collections.Generic.IEnumerable<DSACharacter>>(s);
+    }
+    public static DSACharacter? Load(string Path)
+    {
+        if (!File.Exists(Path))
+            return null;
+
+        var s = File.ReadAllText(Path);
+        var c = System.Text.Json.JsonSerializer.Deserialize<DSACharacter>(s);
+        if (c is not null)
+            c.LoadPath = Path;
+        return c;
+    }
     public void Save(string Path)
     {
         var o = System.Text.Json.JsonSerializer.Serialize(this);

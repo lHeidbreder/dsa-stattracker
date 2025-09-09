@@ -7,6 +7,8 @@
         x:Class="dsa_battle_tracker.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
+        Width="400"
+        Height="600"
         Title="DSA Stattracker"
         Name="Main"
         >
@@ -17,23 +19,6 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <!--
-                        <Expander Header="{Binding LoadText}">
-                            <Expander.ContextMenu>
-                                <ContextMenu>
-                                    <MenuItem Header="Speichern..."/>
-                                    <MenuItem Header="Entfernen"/>
-                                </ContextMenu>
-                            </Expander.ContextMenu>
-                            <StackPanel>
-                                <StackPanel Orientation="Horizontal">
-                                    <Button Content="{Binding LoadText}"></Button>
-                                    <Button>{Binding LoadText}</Button>
-                                </StackPanel>
-                            </StackPanel>
-                        </Expander>
-    -->
-
     <!--CONTENT-->
     <Grid RowDefinitions="0.1*,*,0.1*" HorizontalAlignment="Stretch">
         <Grid.Styles>
@@ -43,15 +28,20 @@
         </Grid.Styles>
     
         <!--Menüband-->
-        <Border Background="LightGray">
+        <Border Padding="6">
             <DockPanel>
                 <Menu DockPanel.Dock="Left">
-                    <MenuItem Header="☰">
+                    <Menu.Styles>
+                        <Style Selector="MenuItem">
+                            <Setter Property="FontSize" Value="15" />
+                        </Style>
+                    </Menu.Styles>
+                    <MenuItem Header="☰" FontSize="28" VerticalAlignment="Stretch" >
                         <MenuItem Header="Sortieren (INI)" Command="{Binding INISort}" />
-                        <MenuItem Header="Sortieren (Alphabetisch)" />
+                        <MenuItem Header="Sortieren (Alphabetisch)" Command="{Binding AlphaSort}" />
                         <Separator />
-                        <MenuItem Header="Liste speichern..." />
-                        <MenuItem Header="Liste laden..." />
+                        <MenuItem Header="Liste speichern..." IsEnabled="False" />
+                        <MenuItem Header="Liste laden..." IsEnabled="False" />
                     </MenuItem>
                 </Menu>
             </DockPanel>
@@ -97,7 +87,7 @@
                                 </UniformGrid.Styles>
 
                                 <Label Content="LE:" />
-                                    <NumericUpDown Value="{Binding LE, Mode=TwoWay}" Minimum="{Binding MinLE, Mode=OneWay}" />
+                                    <NumericUpDown Value="{Binding LE, Mode=TwoWay}" Minimum="-9999" />
                                     <NumericUpDown Value="{Binding MaxLE, Mode=TwoWay}" />
                                 <Label Content="AU:" />
                                     <NumericUpDown Value="{Binding AU, Mode=TwoWay}" />
@@ -108,6 +98,7 @@
                                 <Label Content="KE:" />
                                     <NumericUpDown Value="{Binding KE, Mode=TwoWay}" />
                                     <NumericUpDown Value="{Binding MaxKE, Mode=TwoWay}" />
+                                <!--TODO: INI-->
                             </UniformGrid>
                         </StackPanel>
                     </Expander>
@@ -126,7 +117,7 @@
                 </Style>
             </UniformGrid.Styles>
 
-            <Button Content="{Binding LoadButtonContent}" />
+            <Button Content="{Binding LoadButtonContent}" Command="{Binding LoadCharacter}" />
             <Button Content="{Binding NewButtonContent}" Command="{Binding NewCharacter}" />
         </UniformGrid>
     </Grid>
