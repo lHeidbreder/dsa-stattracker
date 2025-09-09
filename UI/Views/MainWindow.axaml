@@ -7,8 +7,8 @@
         x:Class="dsa_battle_tracker.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Width="400"
-        Height="600"
+        Width="600"
+        Height="800"
         Title="DSA Stattracker"
         Name="Main"
         >
@@ -52,7 +52,22 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <!--TODO: Expander flashen, wenn man die Tasten an den Zahlen drückt-->
-                    <Expander Header="{Binding Name}">
+                    <Expander>
+                        <Expander.Header>
+                            <Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto">
+                                <Grid.Styles>
+                                    <Style Selector="Label">
+                                        <Setter Property="VerticalContentAlignment" Value="Center" />
+                                    </Style>
+                                </Grid.Styles>
+
+                                <Label Content="{Binding Name}" />
+                                <Label Content="INI:" Grid.Column="1" />
+                                <NumericUpDown Value="{Binding Ini}" ShowButtonSpinner="False" Grid.Column="2" Width="2" />
+                                <Label Content="INI Basis:" Grid.Column="3" />
+                                <NumericUpDown Value="{Binding IniBase}" ShowButtonSpinner="False" Grid.Column="4" />
+                            </Grid>
+                        </Expander.Header>
                         <Expander.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Speichern"

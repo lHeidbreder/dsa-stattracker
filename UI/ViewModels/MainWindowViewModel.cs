@@ -91,8 +91,8 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         Chars = new ObservableCollection<DSACharacter>(
             Chars
-            .OrderBy(c => c.IniBase)
-            .OrderBy(c => c.Ini)
+            .OrderByDescending(c => c.IniBase)
+            .OrderByDescending(c => c.Ini)
         );
     }
     public void AlphaSort()
