@@ -40,8 +40,8 @@
                         <MenuItem Header="Sortieren (INI)" Command="{Binding INISort}" />
                         <MenuItem Header="Sortieren (Alphabetisch)" Command="{Binding AlphaSort}" />
                         <Separator />
-                        <MenuItem Header="Liste speichern..." IsEnabled="False" />
-                        <MenuItem Header="Liste laden..." IsEnabled="False" />
+                        <MenuItem Header="Liste speichern..." Command="{Binding SaveList}" />
+                        <MenuItem Header="Liste laden..." Command="{Binding LoadList}" />
                     </MenuItem>
                 </Menu>
             </DockPanel>
@@ -59,11 +59,14 @@
                                     <Style Selector="Label">
                                         <Setter Property="VerticalContentAlignment" Value="Center" />
                                     </Style>
+                                    <Style Selector="NumericUpDown TextBox">
+                                        <Setter Property="HorizontalAlignment" Value="Right" />
+                                    </Style>
                                 </Grid.Styles>
 
                                 <Label Content="{Binding Name}" />
                                 <Label Content="INI:" Grid.Column="1" />
-                                <NumericUpDown Value="{Binding Ini}" ShowButtonSpinner="False" Grid.Column="2" Width="2" />
+                                <NumericUpDown Value="{Binding Ini}" ShowButtonSpinner="False" Grid.Column="2" />
                                 <Label Content="INI Basis:" Grid.Column="3" />
                                 <NumericUpDown Value="{Binding IniBase}" ShowButtonSpinner="False" Grid.Column="4" />
                             </Grid>

@@ -2,16 +2,12 @@
 
 using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reactive;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using dsa_battle_tracker.Models;
-using dsa_battle_tracker.Views;
-using ReactiveUI;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
@@ -25,9 +21,32 @@ public partial class MainWindowViewModel : ViewModelBase
         if (window.Value is null)
             throw new Exception("Kein Fenster gefunden");
         var path = await window.Value.StorageProvider.OpenFilePickerAsync(
-            new Avalonia.Platform.Storage.FilePickerOpenOptions
+            new FilePickerOpenOptions
             {
-                FileTypeFilter = [new FilePickerFileType("JSON")],
+                FileTypeFilter = DSACharacter.SAVE_FILE_FILTER,
+                AllowMultiple = true,
+            }
+        );
+
+        if (path.Count <= 0)
+            return;
+
+        foreach (var p in path)
+        {
+            var c = DSACharacter.Load(p.Path.AbsolutePath);
+            if (c is not null)
+                Chars.Add(c);
+        }
+    }
+    public async Task LoadList()
+    {
+        if (window.Value is null)
+            throw new Exception("Kein Fenster gefunden");
+        
+        var path = await window.Value.StorageProvider.OpenFilePickerAsync(
+            new FilePickerOpenOptions
+            {
+                FileTypeFilter = DSACharacter.LIST_SAVE_FILE_FILTER,
                 AllowMultiple = false,
             }
         );
@@ -35,15 +54,15 @@ public partial class MainWindowViewModel : ViewModelBase
         if (path.Count <= 0)
             return;
 
-        var c = DSACharacter.Load(path[0].Path.AbsolutePath);
+        var c = DSACharacter.LoadList(path[0].Path.AbsolutePath);
         if (c is not null)
-            Chars.Add(c);
+            Chars = new(c);
     }
     public void NewCharacter()
     {
         Chars.Add(new());
     }
-    private void RemoveChar(DSACharacter c)
+    public void RemoveChar(DSACharacter c)
     {
         Chars.Remove(c);
     }
@@ -63,10 +82,12 @@ public partial class MainWindowViewModel : ViewModelBase
         if (window.Value is null)
             throw new Exception("Kein Fenster gefunden");
         var path = await window.Value.StorageProvider.SaveFilePickerAsync(
-            new Avalonia.Platform.Storage.FilePickerSaveOptions
+            new FilePickerSaveOptions
             {
+                FileTypeChoices = DSACharacter.SAVE_FILE_FILTER,
                 SuggestedFileName = c.Name + ".json",
                 DefaultExtension = "json",
+                ShowOverwritePrompt = false,
             }
         );
 
@@ -78,6 +99,29 @@ public partial class MainWindowViewModel : ViewModelBase
             return;
 
         c.Save(path.Path.AbsolutePath);
+    }
+    public async Task SaveList()
+    {
+        if (window.Value is null)
+            throw new Exception("Kein Fenster gefunden");
+        var path = await window.Value.StorageProvider.SaveFilePickerAsync(
+            new FilePickerSaveOptions
+            {
+                FileTypeChoices = DSACharacter.LIST_SAVE_FILE_FILTER,
+                SuggestedFileName = "Kampf",
+                DefaultExtension = "json",
+                ShowOverwritePrompt = false,
+            }
+        );
+
+        if (path is null)
+            return;
+
+        if (File.Exists(path.Path.AbsolutePath)
+            && !await Msg.OverwriteWarning(window.Value, path.Path.AbsolutePath))
+            return;
+
+        DSACharacter.Save(Chars, path.Path.AbsolutePath);
     }
 
     public ObservableCollection<DSACharacter> _chars = [];

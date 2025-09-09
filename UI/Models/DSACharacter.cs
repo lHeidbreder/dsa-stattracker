@@ -1,12 +1,17 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.Json.Serialization;
+using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace dsa_battle_tracker.Models;
 
 public class DSACharacter : ObservableObject
 {
+    public static readonly IReadOnlyList<FilePickerFileType> SAVE_FILE_FILTER = [new FilePickerFileType("JSON") { Patterns = ["*.json"] }];
+    public static readonly IReadOnlyList<FilePickerFileType> LIST_SAVE_FILE_FILTER = SAVE_FILE_FILTER;
+
     [JsonIgnore]
     public string? LoadPath { get; private set; }
     private string _name = "";
@@ -107,6 +112,11 @@ public class DSACharacter : ObservableObject
         var o = System.Text.Json.JsonSerializer.Serialize(this);
         File.WriteAllText(Path, o);
         this.LoadPath = Path;
+    }
+    public static void Save(IEnumerable<DSACharacter> chars, string Path)
+    {
+        var o = System.Text.Json.JsonSerializer.Serialize(chars);
+        File.WriteAllText(Path, o);
     }
 
     public static class StatIndices
