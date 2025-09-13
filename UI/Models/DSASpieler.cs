@@ -4,7 +4,7 @@ namespace dsa_battle_tracker.Models;
 
 public class DSAPlayer : ObservableObject
 {
-    public string Name { get; }
+    public string Name { get; set; }
     public int _einsen = 0;
     public int Einsen
     {
