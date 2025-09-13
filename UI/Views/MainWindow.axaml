@@ -19,6 +19,8 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
+    <TabControl>
+    <TabItem Header="Stattracker" Name="Stattracker">
     <!--CONTENT-->
     <Grid RowDefinitions="0.1*,*,0.1*" HorizontalAlignment="Stretch">
         <Grid.Styles>
@@ -139,5 +141,30 @@
             <Button Content="{Binding NewButtonContent}" Command="{Binding NewCharacter}" />
         </UniformGrid>
     </Grid>
+    </TabItem>
+
+    <TabItem Header="{Binding CounterTab}" Name="{Binding CounterTab}">
+        <StackPanel>
+            <ListBox ItemsSource="{Binding Players}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto">
+                            <TextBox Text="{Binding Name, Mode=TwoWay}" />
+                            <Label Content="Einsen:" Grid.Column="1" />
+                            <NumericUpDown Value="{Binding Einsen, Mode=TwoWay}" Minimum="0" ParsingNumberStyle="Integer" FormatString="0" Grid.Column="2" />
+                            <Label Content="Zwanzigen:" Grid.Column="3" />
+                            <NumericUpDown Value="{Binding Zwanzigen, Mode=TwoWay}" Minimum="0" ParsingNumberStyle="Integer" FormatString="0" Grid.Column="4" />
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <UniformGrid Columns="3">
+                <Button Content="Speichern" Command="{Binding SavePlayers}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                <Button Content="+" Command="{Binding AddPlayer}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                <Button Content="Laden" Command="{Binding LoadPlayers}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+            </UniformGrid>
+        </StackPanel>
+    </TabItem>
+    </TabControl>
 
 </Window>

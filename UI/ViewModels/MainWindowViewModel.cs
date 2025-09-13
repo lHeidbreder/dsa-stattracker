@@ -11,10 +11,11 @@ using dsa_battle_tracker.Models;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    Lazy<Window?> window = new( () => App.MainWindow );
-    
+    Lazy<Window?> window = new(() => App.MainWindow);
+
     public string LoadButtonContent { get; } = "Charakter laden...";
     public string NewButtonContent { get; } = "Neuen Charakter eingeben";
+    public string CounterTab { get; } = "Einsen/Zwanzigen";
 
     public async Task LoadCharacter()
     {
@@ -42,7 +43,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (window.Value is null)
             throw new Exception("Kein Fenster gefunden");
-        
+
         var path = await window.Value.StorageProvider.OpenFilePickerAsync(
             new FilePickerOpenOptions
             {
@@ -145,5 +146,29 @@ public partial class MainWindowViewModel : ViewModelBase
             Chars
             .OrderBy(c => c.Name)
         );
+    }
+
+    public ObservableCollection<DSAPlayer> _players = [];
+    public ObservableCollection<DSAPlayer> Players
+    {
+        get => _players;
+        set { SetProperty(ref _players, value); }
+    }
+    public void AddPlayer()
+    {
+        Players.Add(new());
+    }
+    private string _playerSavePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/dsastattrack-playerlist.json"; //FIXME: move to appdata, its own directory
+    public void SavePlayers()
+    {
+        var o = System.Text.Json.JsonSerializer.Serialize(_players);
+        File.WriteAllText(_playerSavePath, o);
+    }
+    public void LoadPlayers()
+    {
+        var s = File.ReadAllText(_playerSavePath);
+        var c = System.Text.Json.JsonSerializer.Deserialize<ObservableCollection<DSAPlayer>>(s);
+        if (c is not null)
+            Players = c;
     }
 }
