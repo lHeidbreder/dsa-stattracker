@@ -158,7 +158,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         Players.Add(new());
     }
-    private string _playerSavePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "/dsastattrack-playerlist.json"; //FIXME: move to appdata, its own directory
+    private string _playerSavePath = Config.Instance.AppDataPath + "/dsastattrack-playerlist.json";
     public void SavePlayers()
     {
         var o = System.Text.Json.JsonSerializer.Serialize(_players);

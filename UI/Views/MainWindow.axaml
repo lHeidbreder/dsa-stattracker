@@ -94,7 +94,6 @@
                             <UniformGrid Name="Stats" Columns="3">
                                 <UniformGrid.Styles>
                                     <Style Selector="NumericUpDown">
-                                        <!--TODO-->
                                         <Setter Property="ParsingNumberStyle" Value="Integer" />
                                         <Setter Property="FormatString" Value="0" />
                                         <Setter Property="Minimum" Value="0" />
@@ -118,7 +117,6 @@
                                 <Label Content="KE:" />
                                     <NumericUpDown Value="{Binding KE, Mode=TwoWay}" />
                                     <NumericUpDown Value="{Binding MaxKE, Mode=TwoWay}" />
-                                <!--TODO: INI-->
                             </UniformGrid>
                         </StackPanel>
                     </Expander>
