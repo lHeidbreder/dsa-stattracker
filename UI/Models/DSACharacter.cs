@@ -58,7 +58,7 @@ public class DSACharacter : ObservableObject
     public int KE
     {
         get => _stats[StatIndices.KE];
-        set { SetProperty(ref _maxstats[StatIndices.KE], value); }
+        set { SetProperty(ref _stats[StatIndices.KE], value); }
     }
     public int MaxKE
     {
