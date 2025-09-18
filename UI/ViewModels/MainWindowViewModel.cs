@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,9 +22,13 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (window.Value is null)
             throw new Exception("Kein Fenster gefunden");
+
+        Uri _filepath = new("file://" + Config.Instance.CharSaveLoadStartpath);
+        IStorageFolder? startpath = await App.MainWindow!.StorageProvider.TryGetFolderFromPathAsync(_filepath);
         var path = await window.Value.StorageProvider.OpenFilePickerAsync(
             new FilePickerOpenOptions
             {
+                SuggestedStartLocation = startpath,
                 FileTypeFilter = DSACharacter.SAVE_FILE_FILTER,
                 AllowMultiple = true,
             }
@@ -44,9 +49,12 @@ public partial class MainWindowViewModel : ViewModelBase
         if (window.Value is null)
             throw new Exception("Kein Fenster gefunden");
 
+        Uri _filepath = new("file://" + Config.Instance.CharListSavePath);
+        IStorageFolder? startpath = await App.MainWindow!.StorageProvider.TryGetFolderFromPathAsync(_filepath);
         var path = await window.Value.StorageProvider.OpenFilePickerAsync(
             new FilePickerOpenOptions
             {
+                SuggestedStartLocation = startpath,
                 FileTypeFilter = DSACharacter.LIST_SAVE_FILE_FILTER,
                 AllowMultiple = false,
             }
@@ -82,9 +90,13 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (window.Value is null)
             throw new Exception("Kein Fenster gefunden");
+
+        Uri _filepath = new("file://" + Config.Instance.CharSaveLoadStartpath);
+        IStorageFolder? startpath = await App.MainWindow!.StorageProvider.TryGetFolderFromPathAsync(_filepath);
         var path = await window.Value.StorageProvider.SaveFilePickerAsync(
             new FilePickerSaveOptions
             {
+                SuggestedStartLocation = startpath, //FIXME
                 FileTypeChoices = DSACharacter.SAVE_FILE_FILTER,
                 SuggestedFileName = c.Name + ".json",
                 DefaultExtension = "json",
@@ -105,9 +117,13 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (window.Value is null)
             throw new Exception("Kein Fenster gefunden");
+
+        Uri _filepath = new("file://" + Config.Instance.CharListSavePath);
+        IStorageFolder? startpath = await App.MainWindow!.StorageProvider.TryGetFolderFromPathAsync(_filepath);
         var path = await window.Value.StorageProvider.SaveFilePickerAsync(
             new FilePickerSaveOptions
             {
+                SuggestedStartLocation = startpath,
                 FileTypeChoices = DSACharacter.LIST_SAVE_FILE_FILTER,
                 SuggestedFileName = "Kampf",
                 DefaultExtension = "json",
@@ -158,15 +174,14 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         Players.Add(new());
     }
-    private string _playerSavePath = Config.Instance.AppDataPath + "/dsastattrack-playerlist.json";
     public void SavePlayers()
     {
         var o = System.Text.Json.JsonSerializer.Serialize(_players);
-        File.WriteAllText(_playerSavePath, o);
+        File.WriteAllText(Config.Instance.PlayerListSavePath, o);
     }
     public void LoadPlayers()
     {
-        var s = File.ReadAllText(_playerSavePath);
+        var s = File.ReadAllText(Config.Instance.PlayerListSavePath);
         var c = System.Text.Json.JsonSerializer.Deserialize<ObservableCollection<DSAPlayer>>(s);
         if (c is not null)
             Players = c;

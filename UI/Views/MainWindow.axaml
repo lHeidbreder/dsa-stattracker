@@ -91,20 +91,21 @@
                         </Expander.ContextMenu>
                         <StackPanel>
                             <TextBox Text="{Binding Name, Mode=TwoWay}" />
-                            <UniformGrid Name="Stats" Columns="3">
-                                <UniformGrid.Styles>
-                                    <Style Selector="NumericUpDown">
-                                        <Setter Property="ParsingNumberStyle" Value="Integer" />
-                                        <Setter Property="FormatString" Value="0" />
-                                        <Setter Property="Minimum" Value="0" />
-                                    </Style>
-                                    <!--
-                                    <Style Selector="Label">
-                                        <Setter Property="HorizontalContentAlignment" Value="Right" />
-                                    </Style>
-                                    -->
-                                </UniformGrid.Styles>
+                            <StackPanel.Styles>
+                                <Style Selector="NumericUpDown">
+                                    <Setter Property="ParsingNumberStyle" Value="Integer" />
+                                    <Setter Property="FormatString" Value="0" />
+                                    <Setter Property="Minimum" Value="0" />
+                                </Style>
+                                <Style Selector="Label">
+                                    <Setter Property="VerticalContentAlignment" Value="Center" />
+                                <!--
+                                    <Setter Property="HorizontalContentAlignment" Value="Right" />
+                                -->
+                                </Style>
+                            </StackPanel.Styles>
 
+                            <UniformGrid Name="Stats" Columns="3">
                                 <Label Content="LE:" />
                                     <NumericUpDown Value="{Binding LE, Mode=TwoWay}" Minimum="-9999" />
                                     <NumericUpDown Value="{Binding MaxLE, Mode=TwoWay}" />
@@ -117,6 +118,15 @@
                                 <Label Content="KE:" />
                                     <NumericUpDown Value="{Binding KE, Mode=TwoWay}" />
                                     <NumericUpDown Value="{Binding MaxKE, Mode=TwoWay}" />
+                            </UniformGrid>
+                            
+                            <UniformGrid Columns="2">
+                                <Label Content="Erschöpfung:" />
+                                    <NumericUpDown Value="{Binding Exhaustion, Mode=TwoWay}" />
+                                <Label Content="Überanstrengung:" />
+                                    <NumericUpDown Value="{Binding Overexertion, Mode=TwoWay}" />
+                                <Label Content="Entrückung:" />
+                                    <NumericUpDown Value="{Binding Rapture, Mode=TwoWay}" />
                             </UniformGrid>
                         </StackPanel>
                     </Expander>

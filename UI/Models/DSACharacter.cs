@@ -20,8 +20,8 @@ public class DSACharacter : ObservableObject
         get { return _name; }
         set { SetProperty(ref _name, value); }
     }
-    private int[] _stats = { 0, 0, 0, 0 };
-    private int[] _maxstats = { 0, 0, 0, 0 };
+    private int[] _stats = new int[8];
+    private int[] _maxstats = new int[8];
     public int LE
     {
         get => _stats[StatIndices.LE];
@@ -54,6 +54,17 @@ public class DSACharacter : ObservableObject
         get => _maxstats[StatIndices.AU];
         set { SetProperty(ref _maxstats[StatIndices.AU], value); }
     }
+    
+    public int Exhaustion
+    {
+        get => _stats[StatIndices.Exhaustion];
+        set { SetProperty(ref _stats[StatIndices.Exhaustion], value); }
+    }
+    public int Overexertion
+    {
+        get => _stats[StatIndices.Overexertion];
+        set { SetProperty(ref _stats[StatIndices.Overexertion], value); }
+    }
 
     public int KE
     {
@@ -65,7 +76,12 @@ public class DSACharacter : ObservableObject
         get => _maxstats[StatIndices.KE];
         set { SetProperty(ref _maxstats[StatIndices.KE], value); }
     }
-
+    public int Rapture
+    {
+        get => _stats[StatIndices.Rapture];
+        set { SetProperty(ref _stats[StatIndices.Rapture], value); }
+    }
+    
     public int IniBase { get; set; }
     public int Ini { get; set; }
 
@@ -122,8 +138,11 @@ public class DSACharacter : ObservableObject
     public static class StatIndices
     {
         public static readonly int LE = 0;
-        public static readonly int AU = 1;
-        public static readonly int AE = 2;
-        public static readonly int KE = 3;
+        public static readonly int AU = LE + 1;
+        public static readonly int Exhaustion = AU + 1;
+        public static readonly int Overexertion = Exhaustion + 1;
+        public static readonly int AE = Overexertion + 1;
+        public static readonly int KE = AE + 1;
+        public static readonly int Rapture = KE + 1;
     }
 }
