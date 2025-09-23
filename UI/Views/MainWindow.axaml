@@ -153,7 +153,13 @@
 
     <TabItem Header="{Binding CounterTab}" Name="{Binding CounterTab}">
         <StackPanel>
-            <ListBox ItemsSource="{Binding Players}">
+            <ListBox ItemsSource="{Binding Players}" IsTabStop="False" KeyboardNavigation.TabNavigation="Continue">
+                <ListBox.Styles>
+                    <Style Selector="ListBoxItem">
+                        <Setter Property="IsTabStop" Value="False"/>
+                    </Style>
+                </ListBox.Styles>
+
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto">
