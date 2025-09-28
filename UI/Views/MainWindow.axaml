@@ -179,6 +179,10 @@
             </UniformGrid>
         </StackPanel>
     </TabItem>
+
+    <TabItem Header="{Binding ModifiersTab}" Name="{Binding ModifiersTab}">
+        <ModifiersView />
+    </TabItem>
     </TabControl>
 
 </Window>

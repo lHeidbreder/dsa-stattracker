@@ -186,4 +186,6 @@ public partial class MainWindowViewModel : ViewModelBase
         if (c is not null)
             Players = c;
     }
+
+    public string ModifiersTab { get; } = "Modifikatoren";
 }
