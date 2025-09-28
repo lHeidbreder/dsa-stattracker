@@ -13,6 +13,10 @@
         <!--Reach-->
         <Label Content="{Binding MeleeModifiers.Weapon_DK}" />
         <Label Content="{Binding MeleeModifiers.Actual_DK}" />
+        <Label Content="{Binding MeleeModifiers.TargetLocation}" />
+        <Label Content="{Binding MeleeModifiers.SightModifiers}" />
+        <Label Content="{Binding MeleeModifiers.EnvModifiers}" />
+        <Label Content="{Binding MeleeModifiers.PosModifiers}" />
       </StackPanel>
     </TabItem>
     <TabItem Header="{Binding Header_Ranged}">
