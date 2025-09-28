@@ -1,0 +1,21 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:dsa_battle_tracker.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="dsa_battle_tracker.Views.ModifiersView"
+             x:DataType="vm:ModifiersViewModel"
+             >
+  <TabControl>
+    <TabItem Header="{Binding Header_Melee}">
+      <StackPanel>
+        <!--Reach-->
+        <Label Content="{Binding MeleeModifiers.Weapon_DK}" />
+        <Label Content="{Binding MeleeModifiers.Actual_DK}" />
+      </StackPanel>
+    </TabItem>
+    <TabItem Header="{Binding Header_Ranged}">
+    </TabItem>
+  </TabControl>
+</UserControl>
