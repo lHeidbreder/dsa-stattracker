@@ -13,10 +13,10 @@ public class MeleeModifierSet : ObservableObject
     [Flags]
     public enum Distance
     {
-        H,
-        N,
-        S,
-        P = 4,
+        H = 1,
+        N = 2,
+        S = 4,
+        P = 8,
     }
     public Distance Weapon_DK { get; set; } = Distance.H | Distance.N | Distance.S | Distance.P;
     public Distance Actual_DK { get; set; } = Distance.N;
