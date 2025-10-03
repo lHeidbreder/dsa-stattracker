@@ -14,9 +14,14 @@
         <Label Content="{Binding MeleeModifiers.Weapon_DK}" />
         <Label Content="{Binding MeleeModifiers.Actual_DK}" />
         <Label Content="{Binding MeleeModifiers.TargetLocation}" />
-        <Label Content="{Binding MeleeModifiers.SightModifiers}" />
-        <Label Content="{Binding MeleeModifiers.EnvModifiers}" />
-        <Label Content="{Binding MeleeModifiers.PosModifiers}" />
+        <Label Content="{Binding MeleeModifiers.SightModifier}" />
+        <Label Content="{Binding MeleeModifiers.CloseQuartersModifier}" />
+        <Label Content="{Binding MeleeModifiers.TargetPosition}" />
+        <Label Content="{Binding MeleeModifiers.OwnPosition}" />
+        <Label Content="{Binding MeleeModifiers.OffhandAbility}" />
+        <Label Content="{Binding MeleeModifiers.IsOffhand}" />
+        <Label Content="{Binding MeleeModifiers.TargetSurpriseLevel}" />
+        <Label Content="{Binding MeleeModifiers.OutnumberedLevel}" />
       </StackPanel>
     </TabItem>
     <TabItem Header="{Binding Header_Ranged}">
