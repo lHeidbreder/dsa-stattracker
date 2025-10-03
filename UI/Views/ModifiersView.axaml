@@ -7,24 +7,55 @@
              x:Class="dsa_battle_tracker.Views.ModifiersView"
              x:DataType="vm:ModifiersViewModel"
              >
+  <Border>
   <TabControl>
     <TabItem Header="{Binding Header_Melee}">
-      <StackPanel>
+      <UniformGrid Columns="2">
+        <UniformGrid.Styles>
+          <Style Selector="Label">
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+          </Style>
+          <Style Selector="ComboBox">
+            <Setter Property="VerticalAlignment" Value="Center" />
+          </Style>
+        </UniformGrid.Styles>
+
         <!--Reach-->
-        <Label Content="{Binding MeleeModifiers.Weapon_DK}" />
-        <Label Content="{Binding MeleeModifiers.Actual_DK}" />
+        <Label Content="{Binding Label_OwnReach}" />
+        <Grid ColumnDefinitions="*,*,*,*">
+          <CheckBox Content="H" IsChecked="{Binding Own_H, Mode=TwoWay}" />
+          <CheckBox Content="N" IsChecked="{Binding Own_N, Mode=TwoWay}" Grid.Column="1" />
+          <CheckBox Content="S" IsChecked="{Binding Own_S, Mode=TwoWay}" Grid.Column="2" />
+          <CheckBox Content="P" IsChecked="{Binding Own_P, Mode=TwoWay}" Grid.Column="3" />
+        </Grid>
+        <Label Content="{Binding Label_ActualReach}" />
+        <ComboBox ItemsSource="{Binding DK_Options}" SelectedItem="{Binding ActualDK, Mode=TwoWay}" />
+        
+        <!--Target Location-->
         <Label Content="{Binding MeleeModifiers.TargetLocation}" />
-        <Label Content="{Binding MeleeModifiers.SightModifier}" />
+        <ComboBox ItemsSource="{Binding HitLocations}" SelectedItem="{Binding TargetedLocation, Mode=TwoWay}" />
+
+        <!--Darkness-->
+        <Label Content="{Binding MeleeModifiers.DarknessModifier}" />
+        <ComboBox ItemsSource="{Binding DarknessModifiers}" SelectedItem="{Binding LightLevel, Mode=TwoWay}" />
+
+        <!--Close Quarters-->
         <Label Content="{Binding MeleeModifiers.CloseQuartersModifier}" />
+
         <Label Content="{Binding MeleeModifiers.TargetPosition}" />
         <Label Content="{Binding MeleeModifiers.OwnPosition}" />
         <Label Content="{Binding MeleeModifiers.OffhandAbility}" />
         <Label Content="{Binding MeleeModifiers.IsOffhand}" />
         <Label Content="{Binding MeleeModifiers.TargetSurpriseLevel}" />
         <Label Content="{Binding MeleeModifiers.OutnumberedLevel}" />
-      </StackPanel>
+      </UniformGrid>
     </TabItem>
     <TabItem Header="{Binding Header_Ranged}">
     </TabItem>
+    <TabItem Header="{Binding Header_Magic}">
+    </TabItem>
+    <TabItem Header="{Binding Header_Carmic}">
+    </TabItem>
   </TabControl>
+  </Border>
 </UserControl>

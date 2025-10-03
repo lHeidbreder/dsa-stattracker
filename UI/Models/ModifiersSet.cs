@@ -46,14 +46,14 @@ public class MeleeModifierSet : ObservableObject
     #endregion
 
     #region Sight
-    public enum SightModifiers
+    public enum DarknessModifiers
     {
         Moonlight,
         Starlight,
         Invisible,
         Darkness,
     }
-    public SightModifiers? SightModifier { get; set; } = null;
+    public DarknessModifiers? DarknessModifier { get; set; } = null;
     #endregion
 
     #region Water
@@ -148,14 +148,14 @@ public class MeleeModifierSet : ObservableObject
 
         }
 
-        if (SightModifier is not null)
+        if (DarknessModifier is not null)
         {
-            rtn += SightModifier switch
+            rtn += DarknessModifier switch
             {
-                SightModifiers.Moonlight => 3,
-                SightModifiers.Starlight => 5,
-                SightModifiers.Invisible => 6,
-                SightModifiers.Darkness => 8,
+                DarknessModifiers.Moonlight => 3,
+                DarknessModifiers.Starlight => 5,
+                DarknessModifiers.Invisible => 6,
+                DarknessModifiers.Darkness => 8,
                 _ => throw new InvalidOperationException(),
             };
 
@@ -236,8 +236,8 @@ public class MeleeModifierSet : ObservableObject
             rtn += OutnumberedLevel switch
             {
                 Outnumbered.MoreAllies => -1,
-                Outnumbered.OneMoreEnemy => 1,
-                Outnumbered.MoreEnemies => 2,
+                Outnumbered.OneMoreEnemy => 0,
+                Outnumbered.MoreEnemies => 0,
                 _ => throw new InvalidOperationException(),
             };
         }
@@ -258,6 +258,89 @@ public class MeleeModifierSet : ObservableObject
             return new(false, 0);
         if (distance > 0)
             rtn += 6;
+
+        if (DarknessModifier is not null)
+        {
+            rtn += DarknessModifier switch
+            {
+                DarknessModifiers.Moonlight => 3,
+                DarknessModifiers.Starlight => 5,
+                DarknessModifiers.Invisible => 6,
+                DarknessModifiers.Darkness => 8,
+                _ => throw new InvalidOperationException(),
+            };
+
+        }
+
+        if (WaterModifier is not null)
+        {
+            rtn += WaterModifier switch
+            {
+                WaterModifiers.KneeDeep => 2,
+                WaterModifiers.HipDeep => 4,
+                WaterModifiers.ShoulderDeep => 6,
+                WaterModifiers.Submerged => 6,
+                _ => throw new InvalidOperationException(),
+            };
+        }
+
+        if (CloseQuartersModifier is not null)
+        {
+            rtn += CloseQuartersModifier switch
+            {
+                CloseQuartersModifiers.LongSwing => 2,
+                CloseQuartersModifiers.ShortSwing => 0,
+                CloseQuartersModifiers.PokeyStick => 2,
+                _ => throw new InvalidOperationException(),
+            };
+        }
+
+        if (TargetPosition is not null) {
+            rtn += TargetPosition switch
+            {
+                PositionModifier.Laying => -5,
+                PositionModifier.Kneeling => -3,
+                PositionModifier.Flying => 4,
+                _ => throw new InvalidOperationException(),
+            };
+        }
+
+        if (OwnPosition is not null)
+        {
+            rtn += OwnPosition switch
+            {
+                PositionModifier.Laying => 3,
+                PositionModifier.Kneeling => 1,
+                PositionModifier.Flying => 0,
+                _ => throw new InvalidOperationException(),
+            };
+        }
+
+        if (IsOffhand)
+        {
+            if (OffhandAbility is not null)
+            {
+                rtn += OffhandAbility switch
+                {
+                    OffhandAbilities.Offhand => 6,
+                    OffhandAbilities.DualWield1 => 3,
+                    OffhandAbilities.DualWield2 => 0,
+                    _ => throw new InvalidOperationException(),
+                };
+            }
+            else rtn += 9;
+        }
+
+        if (OutnumberedLevel is not null)
+        {
+            rtn += OutnumberedLevel switch
+            {
+                Outnumbered.MoreAllies => 0,
+                Outnumbered.OneMoreEnemy => 1,
+                Outnumbered.MoreEnemies => 2,
+                _ => throw new InvalidOperationException(),
+            };
+        }
 
         return new(true, rtn);
     }
