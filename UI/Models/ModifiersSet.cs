@@ -184,7 +184,8 @@ public class MeleeModifierSet : ObservableObject
             };
         }
 
-        if (TargetPosition is not null) {
+        if (TargetPosition is not null)
+        {
             rtn += TargetPosition switch
             {
                 PositionModifier.Laying => -3,
@@ -295,7 +296,8 @@ public class MeleeModifierSet : ObservableObject
             };
         }
 
-        if (TargetPosition is not null) {
+        if (TargetPosition is not null)
+        {
             rtn += TargetPosition switch
             {
                 PositionModifier.Laying => -5,
@@ -341,6 +343,297 @@ public class MeleeModifierSet : ObservableObject
                 _ => throw new InvalidOperationException(),
             };
         }
+
+        return new(true, rtn);
+    }
+}
+
+public class RangedModifierSet : ObservableObject
+{
+    #region Boons/Banes
+    public bool HasDistanceSense = false;
+    #endregion
+
+    #region WeaponType
+    public enum RangedWeaponTypes
+    {
+        Shot,
+        Throw,
+    }
+    public RangedWeaponTypes WeaponType = RangedWeaponTypes.Shot;
+    #endregion
+
+    #region Abilities
+    public enum SharpshooterAbilities
+    {
+        Sharpshooter,
+        MasterBowman,
+    }
+    public SharpshooterAbilities? SharpshooterAbility;
+    #endregion
+
+    #region Size
+    public enum SizeModifiers
+    {
+        tiny,
+        verySmall,
+        small,
+        medium,
+        large,
+        veryLarge,
+    }
+    public SizeModifiers TargetSize = SizeModifiers.medium;
+    #endregion
+
+    #region Cover
+    public enum CoverModifiers
+    {
+        half,
+        threeQuarters,
+    }
+    public CoverModifiers? CoverModifier;
+    #endregion
+
+    #region Distance
+    public enum DistanceModifiers
+    {
+        veryClose,
+        close,
+        medium,
+        far,
+        veryFar,
+    }
+    public DistanceModifiers Distance = DistanceModifiers.medium;
+    //TODO: one-eyed, color blind
+    #endregion
+
+    #region Movement
+    public enum MovementModifiers
+    {
+        affixed,
+        still,
+        lightMovement,
+        fastMovement,
+        veryFastMovement,
+        //TODO: movement of bodypart when targeting
+    }
+    public MovementModifiers TargetMovement = MovementModifiers.still;
+    public int CombatantsInH = 0;
+    public int CombatantsInNS = 0;
+    #endregion
+
+    #region Sight
+    public enum DarknessModifiers
+    {
+        DawnDusk,
+        Moonlight,
+        Starlight,
+        Darkness,
+    }
+    public DarknessModifiers? Darkness;
+    public enum NightVisionBoons
+    {
+        NightVision,
+        DarkVision,
+        NightBlind,
+    }
+    public NightVisionBoons? NightVision;
+    public enum FogModifiers
+    {
+        Mist,
+        DenseFog,
+    }
+    public FogModifiers? Fog;
+    public bool IsTargetInvisible = false;
+    #endregion
+
+    #region Steep Shot
+    public enum SteepnessModifiers
+    {
+        Up,
+        Down,
+    }
+    public SteepnessModifiers? Steepness;
+    #endregion
+
+    #region Wind
+    public enum WindModifiers
+    {
+        Gusts,
+        StrongGusts,
+    }
+    public WindModifiers? Wind;
+    #endregion
+
+    #region Aiming
+    private bool isQuickshot = false;
+    public bool IsQuickshot
+    {
+        get => isQuickshot;
+        set
+        {
+            isQuickshot = value;
+            if (isQuickshot)
+                ActionsAiming = 0;
+        }
+    }
+    public int ActionsAiming = 0; //TODO: only show and use when no quickshot
+    #endregion
+
+    #region Mounted
+    public bool IsMounted = false; //TODO: only use the following when actually mounted
+    public enum MountMovements
+    {
+        Still,
+        Walking,
+        Running,
+    }
+    public MountMovements MountMovement = MountMovements.Still;
+    public bool Mounted_NoHarness = false;
+    #endregion
+
+    #region Other
+    public bool IsSecondShot = false;
+    public bool IsInWater = false;
+    #endregion
+
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns>False indicates impossibility, int is modifier</returns>
+    public Tuple<bool, int> AttackMod()
+    {
+        int rtn = 0;
+
+        if (HasDistanceSense)
+            rtn -= 2;
+
+        rtn += TargetSize switch
+        {
+            SizeModifiers.tiny => 8,
+            SizeModifiers.verySmall => 6,
+            SizeModifiers.small => 4,
+            SizeModifiers.medium => 2,
+            SizeModifiers.large => 0,
+            SizeModifiers.veryLarge => -2,
+            _ => throw new InvalidOperationException(),
+        };
+
+        if (CoverModifier is not null)
+            rtn += CoverModifier switch
+            {
+                CoverModifiers.half => 2,
+                CoverModifiers.threeQuarters => 4,
+                _ => throw new InvalidOperationException(),
+            };
+
+        rtn += Distance switch
+        {
+            DistanceModifiers.veryClose => -2,
+            DistanceModifiers.close => 0,
+            DistanceModifiers.medium => 4,
+            DistanceModifiers.far => 8,
+            DistanceModifiers.veryFar => 12,
+            _ => throw new InvalidOperationException(),
+        };
+
+        if (CombatantsInH + CombatantsInNS == 0)
+            rtn += TargetMovement switch
+            {
+                MovementModifiers.affixed => -4,
+                MovementModifiers.still => -2,
+                MovementModifiers.lightMovement => 0,
+                MovementModifiers.fastMovement => 2,
+                MovementModifiers.veryFastMovement => 4,
+                _ => throw new InvalidOperationException(),
+            };
+        rtn += (CombatantsInH * 2);
+        rtn += (CombatantsInNS * 3);
+
+        if (Fog is not null)
+            rtn += Fog switch
+            {
+                FogModifiers.Mist => 2,
+                FogModifiers.DenseFog => 4,
+                _ => throw new InvalidOperationException(),
+            };
+
+        if (Darkness is not null)
+        {
+            int darknessMod = Darkness switch
+            {
+                DarknessModifiers.DawnDusk => 2,
+                DarknessModifiers.Moonlight => 4,
+                DarknessModifiers.Starlight => 6,
+                DarknessModifiers.Darkness => 8,
+                _ => throw new InvalidOperationException(),
+            };
+
+            if (NightVision is not null)
+                switch (NightVision)
+                {
+                    case NightVisionBoons.NightVision: throw new NotImplementedException(); //FIXME
+                    case NightVisionBoons.DarkVision: darknessMod /= 2; break;
+                    case NightVisionBoons.NightBlind: darknessMod = Math.Min(8, darknessMod * 2); break;
+                    default: throw new InvalidOperationException();
+                }
+
+            rtn += darknessMod;
+        }
+
+        if (IsTargetInvisible)
+            rtn += 8;
+
+        if (Steepness is not null)
+            rtn += Steepness switch
+            {
+                SteepnessModifiers.Down => 2,
+                SteepnessModifiers.Up => (WeaponType == RangedWeaponTypes.Shot) ? 4 : 8,
+                _ => throw new InvalidOperationException(),
+            };
+
+        if (Wind is not null)
+            rtn += Wind switch
+            {
+                WindModifiers.Gusts => 4,
+                WindModifiers.StrongGusts => 8,
+                _ => throw new InvalidOperationException(),
+            };
+
+        if (IsQuickshot)
+            rtn += SharpshooterAbility switch
+            {
+                null => 2,
+                SharpshooterAbilities.Sharpshooter => 1,
+                SharpshooterAbilities.MasterBowman => 0,
+                _ => throw new InvalidOperationException(),
+            };
+        else
+        {
+            if (SharpshooterAbility is not null)
+                rtn -= ActionsAiming;
+            else rtn -= ActionsAiming / 2;
+        }
+
+        if (IsMounted)
+        {
+            rtn += MountMovement switch
+            {
+                MountMovements.Still => (WeaponType == RangedWeaponTypes.Shot) ? 2 : 1,
+                MountMovements.Walking => (WeaponType == RangedWeaponTypes.Shot) ? 4 : 2,
+                MountMovements.Running => (WeaponType == RangedWeaponTypes.Shot) ? 8 : 4,
+                _ => throw new InvalidOperationException(),
+            };
+            if (Mounted_NoHarness)
+                rtn += (WeaponType == RangedWeaponTypes.Shot) ? 4 : 2;
+        }
+
+        if (IsSecondShot)
+            rtn += (WeaponType == RangedWeaponTypes.Shot) ? 4 : 2;
+
+        if (IsInWater)
+            rtn += 5;
 
         return new(true, rtn);
     }
