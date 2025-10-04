@@ -51,11 +51,10 @@
         </Border>
         
         <!--Charaktere-->
-        <!--FIXME: use ItemsControl-->
-        <ListBox Grid.Row="1" ItemsSource="{Binding Chars}">
-            <ListBox.ItemTemplate>
+        <ItemsControl Grid.Row="1" ItemsSource="{Binding Chars}">
+            <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <!--TODO: Expander flashen, wenn man die Tasten an den Zahlen drückt-->
+                    <Border Padding="2">
                     <Expander>
                         <Expander.Header>
                             <Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto">
@@ -132,9 +131,10 @@
                             </UniformGrid>
                         </StackPanel>
                     </Expander>
+                    </Border>
                 </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
 
         <!--Buttons Laden/Neu eingeben-->
         <UniformGrid Grid.Row="2" Columns="2">
@@ -155,16 +155,16 @@
 
     <TabItem Header="{Binding CounterTab}" Name="{Binding CounterTab}">
         <StackPanel>
-            <ListBox ItemsSource="{Binding Players}" IsTabStop="False" KeyboardNavigation.TabNavigation="Continue">
-                <ListBox.Styles>
+            <ItemsControl ItemsSource="{Binding Players}" IsTabStop="False" KeyboardNavigation.TabNavigation="Continue">
+                <ItemsControl.Styles>
                     <Style Selector="ListBoxItem">
                         <Setter Property="IsTabStop" Value="False"/>
                     </Style>
-                </ListBox.Styles>
+                </ItemsControl.Styles>
 
-                <!--FIXME: use ItemsControl-->
-                <ListBox.ItemTemplate>
+                <ItemsControl.ItemTemplate>
                     <DataTemplate>
+                        <Border Padding="2">
                         <Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto">
                             <TextBox Text="{Binding Name, Mode=TwoWay}" />
                             <Label Content="Einsen:" Grid.Column="1" />
@@ -172,9 +172,10 @@
                             <Label Content="Zwanzigen:" Grid.Column="3" />
                             <NumericUpDown Value="{Binding Zwanzigen, Mode=TwoWay}" Minimum="0" ParsingNumberStyle="Integer" FormatString="0" Grid.Column="4" />
                         </Grid>
+                        </Border>
                     </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
             <UniformGrid Columns="3">
                 <Button Content="Speichern" Command="{Binding SavePlayers}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
                 <Button Content="+" Command="{Binding AddPlayer}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
