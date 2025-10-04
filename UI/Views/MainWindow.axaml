@@ -51,6 +51,7 @@
         </Border>
         
         <!--Charaktere-->
+        <!--FIXME: use ItemsControl-->
         <ListBox Grid.Row="1" ItemsSource="{Binding Chars}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -161,6 +162,7 @@
                     </Style>
                 </ListBox.Styles>
 
+                <!--FIXME: use ItemsControl-->
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto">

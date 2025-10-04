@@ -32,22 +32,44 @@
         <ComboBox ItemsSource="{Binding DK_Options}" SelectedItem="{Binding ActualDK, Mode=TwoWay}" />
         
         <!--Target Location-->
-        <Label Content="{Binding MeleeModifiers.TargetLocation}" />
+        <Label Content="{Binding Label_TargetLocation}" />
         <ComboBox ItemsSource="{Binding HitLocations}" SelectedItem="{Binding TargetedLocation, Mode=TwoWay}" />
 
         <!--Darkness-->
-        <Label Content="{Binding MeleeModifiers.DarknessModifier}" />
+        <Label Content="{Binding Label_DarknessModifier}" />
         <ComboBox ItemsSource="{Binding DarknessModifiers}" SelectedItem="{Binding LightLevel, Mode=TwoWay}" />
 
         <!--Close Quarters-->
-        <Label Content="{Binding MeleeModifiers.CloseQuartersModifier}" />
+        <Label Content="{Binding Label_CloseQuartersModifier}" />
+        <ComboBox ItemsSource="{Binding CQC_Modifiers}" SelectedItem="{Binding CQC, Mode=TwoWay}" />
 
-        <Label Content="{Binding MeleeModifiers.TargetPosition}" />
-        <Label Content="{Binding MeleeModifiers.OwnPosition}" />
-        <Label Content="{Binding MeleeModifiers.OffhandAbility}" />
-        <Label Content="{Binding MeleeModifiers.IsOffhand}" />
-        <Label Content="{Binding MeleeModifiers.TargetSurpriseLevel}" />
-        <Label Content="{Binding MeleeModifiers.OutnumberedLevel}" />
+        <!--Position-->
+        <Label Content="{Binding Label_TargetPosition}" />
+        <ComboBox ItemsSource="{Binding Position_Modifiers}" SelectedItem="{Binding TargetPosition, Mode=TwoWay}" />
+        <Label Content="{Binding Label_OwnPosition}" />
+        <ComboBox ItemsSource="{Binding Position_Modifiers}" SelectedItem="{Binding OwnPosition, Mode=TwoWay}" />
+
+        <!--Offhand-->
+        <Label Content="{Binding Label_OffhandAbility}" />
+        <ComboBox ItemsSource="{Binding OffhandAbilities}" SelectedItem="{Binding OffhandAbility, Mode=TwoWay}" />
+        <Label Content="{Binding Label_IsOffhand}" />
+        <CheckBox IsChecked="{Binding IsOffhand, Mode=TwoWay}" />
+
+        <!--Surprise-->
+        <Label Content="{Binding Label_TargetSurpriseLevel}" />
+        <ComboBox ItemsSource="{Binding SurpriseLevels}" SelectedItem="{Binding TargetSurprise}" />
+
+        <!--Numbers-->
+        <Label Content="{Binding Label_OutnumberedLevel}" />
+        <ComboBox ItemsSource="{Binding OutnumberedLevels}" SelectedItem="{Binding Outnumbered}" />
+
+        <!--Sums-->
+        <Border>
+          <Label Content="{Binding Sum_AT_Mod}" />
+        </Border>
+        <Border>
+          <Label Content="{Binding Sum_PA_Mod}" />
+        </Border>
       </UniformGrid>
     </TabItem>
     <TabItem Header="{Binding Header_Ranged}">
